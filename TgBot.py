@@ -1,5 +1,5 @@
 # coding=UTF-8
-import traceback, threading, json
+import traceback, threading, json, datetime, time
 from threading import Event
 import telepot
 from telepot.loop import MessageLoop
@@ -19,6 +19,7 @@ class TgBot(threading.Thread):
         
     def handler(self, msg):
         try:
+            _ts = msg['date']
             _text = msg['text'] if 'text' in msg else ''
             _chat = msg['chat']
             _from = msg['from']
@@ -37,15 +38,27 @@ class TgBot(threading.Thread):
             elif _text.startswith('#') and self.toggle:
                 message = '[{0}]: {1}'.format(_from['username'], _text[1:].encode('utf-8'))
                 self.tkQueue.put(message)
+            elif time.time() < _ts:
+                if 'sticker' in msg:
+                    sticker = msg['sticker']['file_id']
+                    self.bot.sendSticker(_chat['id'], sticker)
+                
         except:
             print(traceback.print_exc())
 
     def start(self):
         super(TgBot, self).start()
+        self.duangSticker = self.bot.getStickerSet(name='DuanG')
+#        print(self.duangSticker.items())
 
     def run(self):
         MessageLoop(self.bot, self.handler).run_as_thread()
         while not self.stopped.wait(self.loopDelay):
+            if self.roomId and datetime.datetime.now().strftime('%H:%M:%S') == '06:00:00':
+                time.sleep(0.5)
+                self.bot.sendSticker(self.roomId, 'CAADBQADwwMAAvjGxQrfSvi6XkF9cwI') 
+                self.bot.sendSticker(self.roomId, 'CAADBQADwwMAAvjGxQrfSvi6XkF9cwI') 
+                self.bot.sendSticker(self.roomId, 'CAADBQADwwMAAvjGxQrfSvi6XkF9cwI') 
             while self.tgQueue.qsize() > 0 and self.toggle and self.roomId:
                 self.bot.sendMessage(self.roomId, self.tgQueue.get())
 
