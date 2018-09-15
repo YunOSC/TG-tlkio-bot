@@ -1,0 +1,11 @@
+{
+    "telegramBot": {
+        "botUserName": "This is bot USERNAME",
+        "token": "This is your bot token"
+    },
+    "tlkioBot": {
+        "roomId": "This is your tlk.io square id"
+    },
+    "telegramGroupId": [],
+    "pair" : []
+}
