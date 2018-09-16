@@ -5,8 +5,21 @@ import telepot
 from telepot.loop import MessageLoop
 
 from Pair import Pair
+from entity import Entity
+from room import Room
+from command import Command
 
 class TgBot(threading.Thread):
+
+    def loadPersonConfig(self):
+        persons = {}
+        return persons
+
+    def loadRoomConfig(self):
+        rooms = {}
+        for (key, value) in self.config['rooms']:
+            rooms[key] = Room(value)
+        return rooms
 
     def __init__(self, config, tgQueue, tkQueue, loopDelay=0.1):
         super(TgBot, self).__init__()
@@ -17,14 +30,44 @@ class TgBot(threading.Thread):
         self.tgQueue = tgQueue
         self.tkQueue = tkQueue
         self.config = config
-        self.botUserName = config['telegramBot']['botUserName']
-        self.bot = telepot.Bot(config['telegramBot']['token'])
+        self.botUserName = config['botUserName']
+        self.bot = telepot.Bot(config['token'])
         self.roomId = None
         
-        self.groups = config['telegramGroupId']
-        self.pairs = Pair.fromJson(config['pair'])
+#        self.groups = config['telegramGroupId']
+        self.groups = None
+#        self.pairs = Pair.fromJson(config['pair'])
+        self.pairs = None
+        self.persons = self.loadPersonConfig()
+        self.rooms = self.loadRoomConfig()
 
     def handler(self, msg):
+        try:
+            _from = msg['from']
+            _chat = msg['chat']
+#            if 'entities' in msg:  # Mention or Command in msg
+#                _entities = Entity.fromDict(msg['entities'])
+#                if _entities[0].type == 'mention' and _entities[0].fetchData(msg) == self.botUserName:  # Mention AsukaMeow
+#                    if _entities[1].type == 'bot_command':  # Mention and type command
+#                        pass
+#                    else:  # Mention and type message
+#                        pass
+#                elif _entities[0].type == 'bot_command':  # Commands
+#                    pass
+#                else:   # Others
+#                    pass
+            if _chat['type'] == 'private' and _chat['id'] in self.persons:
+                pass
+            elif _chat['type'] == 'group' and _chat['id'] in self.rooms:
+                pass
+            else:
+                pass
+                #print(_from, _chat)
+        except:
+            print(traceback.print_exc())
+        finally:
+            return 
+
         try:
             _from = msg['from']
             _chatId = msg['chat']['id']
@@ -110,4 +153,4 @@ class TgBot(threading.Thread):
 
     def stop(self):
         self.stopped.set()
-        self.config['pair'] = Pair.toJson(self.pairs)
+#        self.config['pair'] = Pair.toJson(self.pairs)

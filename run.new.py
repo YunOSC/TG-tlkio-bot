@@ -1,30 +1,31 @@
 from __future__ import unicode_literals
 import sys, json, Queue
 
-from TgBot import TgBot
+from tgbot import TgBot
 from TkBot import TkBot
 
 tkRoomId = 8099831
 
-def loadConfig(default='./config.json'):
-    with open(default) as f:
+def loadConfig(path):
+    with open(path) as f:
         config = json.loads(f.read())
     return config
 
-def writeConfig(config, default='./config.json'):
+def writeConfig(config, path):
     try:
         data = json.dumps(config, indent=4)
-        with open(default, 'w'): pass # Clear file content
-        with open(default, 'w') as f:
+        with open(path, 'w'): pass # Clear file content
+        with open(path, 'w') as f:
             f.write(data)
     except:
         pass
 
 if __name__ == "__main__":
-    config = loadConfig()
+    path = './config.new.json'
+    config = loadConfig(path)
     tgQueue = Queue.Queue()
     tkQueue = Queue.Queue()
-    tgBot = TgBot(config, tgQueue=tgQueue, tkQueue=tkQueue)
+    tgBot = TgBot(config['telegramBot'], tgQueue=tgQueue, tkQueue=tkQueue)
     tkBot = TkBot(tkRoomId, tkQueue=tkQueue, tgQueue=tgQueue)
 
     while True:
@@ -36,7 +37,7 @@ if __name__ == "__main__":
             elif 'stop' in userInput:
                 tgBot.stop()
                 tkBot.stop()
-                writeConfig(config)
+#                writeConfig(config)
                 sys.exit(0)
         except KeyboardInterrupt:
             tgBot.stop()
