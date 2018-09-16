@@ -4,7 +4,6 @@ from threading import Event
 import telepot
 from telepot.loop import MessageLoop
 
-from Pair import Pair
 from entity import Entity
 from room import Room
 from command import Command
@@ -61,8 +60,7 @@ class TgBot(threading.Thread):
             elif _chat['type'] == 'group' and _chat['id'] in self.rooms:
                 pass
             else:
-                pass
-                #print(_from, _chat)
+                print(_from, _chat)
         except:
             print(traceback.print_exc())
         finally:

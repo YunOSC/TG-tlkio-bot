@@ -1,20 +1,11 @@
 {
-    "pair": {
-        "8099831": {
-            "toggle": false, 
-            "tgGroups": [
-                -317830139
-            ]
-        }
-    }, 
-    "tlkioBot": {
-        "roomId": "8099831"
-    }, 
     "telegramBot": {
         "botUserName": "AsukaMeow_bot", 
-        "token": "652483905:AAEPmruMxQAvI0weh2zL4R8-_VY6QwYYxJ0"
-    }, 
-    "telegramGroupId": [
-        -317830139
-    ]
+        "token": "652483905:AAEPmruMxQAvI0weh2zL4R8-_VY6QwYYxJ0",
+        "rooms": {}
+    },
+    "tlkioBot": {
+        "roomId": "This is your tlk.io square id",
+        "rooms": {}
+    }
 }
