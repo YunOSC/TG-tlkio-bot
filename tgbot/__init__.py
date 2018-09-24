@@ -9,6 +9,7 @@ from tgbot.command import Command
 from tgbot.command.bind import Bind
 from tgbot.command.listbind import ListBind
 from tgbot.command.toggle import Toggle
+from tgbot.command.unbind import UnBind
 
 class TgBot(threading.Thread):
 
@@ -24,43 +25,42 @@ class TgBot(threading.Thread):
         self.stopped = Event()
         self.loopDelay = loopDelay
 
-        self.toggle = False
         self.tunnels = tunnels
         self.config = config
         self.botUserName = config['botUserName']
         self.bot = telepot.Bot(config['token'])
-        self.roomId = None
         
         self.commands = [
             #Alarm('alarm', time.time())
             Bind('bind'),
             ListBind('listbind'),
-            Toggle('toggle')
+            Toggle('toggle'),
+            UnBind('unbind')
         ]
         self.persons = self.loadPersonConfig()
 
     def sendMessage(self, _id, _msg):
         self.bot.sendMessage(_id, _msg)
 
-
     def handler(self, msg):
         try:
             _from = msg['from']
             _chat = msg['chat']
-            if msg['text'].startswith('/'):
-                for each in self.commands:
-                    if msg['text'].startswith('/' + each.cmd): #msg['text'].startswith('/' + type(each).__name__.lower()):
-                        return each.process(self, msg)
-                self.sendMessage(_chat['id'], 'Unknown command')
-            else:
+            if 'text' in msg:
                 _text = msg['text']
-                for tunnel in getMatchTunnels(self.tunnels, tgId=_chat['id']):
-                    if tunnel.tg['toggle'] and _text.startswith('#'):
-                        if _text.startswith('##'):
-                            message = '[Anonymous]: {0}'.format(_text[2:])
-                        else:
-                            message = '[{0}]: {1}'.format(_from['username'], _text[1:])
-                        tunnel.tk['queue'].put(message)
+                if _text.startswith('/'):
+                    for each in self.commands:
+                        if _text.split(' ')[0] == ('/' + each.cmd): #_text.startswith('/' + type(each).__name__.lower()):
+                            return each.process(self, msg)
+                    self.sendMessage(_chat['id'], 'Unknown command')
+                else:
+                    for tunnel in getMatchTunnels(self.tunnels, tgId=_chat['id']):
+                        if tunnel.tg['toggle'] and _text.startswith('#'):
+                            if _text.startswith('##'):
+                                message = '[Anonymous]: {0}'.format(_text[2:])
+                            else:
+                                message = '[{0}]: {1}'.format(_from['username'], _text[1:])
+                            tunnel.tk['queue'].put(message)
             
         except:
             print(traceback.print_exc())

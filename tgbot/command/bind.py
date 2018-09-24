@@ -1,6 +1,7 @@
 
 from tgbot.command import Command
 from tkbot import TkBot
+from utils import *
 from utils.tunnel import Tunnel
 
 class Bind(Command):
@@ -12,9 +13,14 @@ class Bind(Command):
         pass
 
     def process(self, bot, msg):
-        _chat = msg['chat']
+        _tgId = msg['chat']['id']
         _text = msg['text']
         tkName = _text.replace('/bind ', '')
-        bot.tunnels.append(Tunnel.new(_chat['id'], tkName))
-        bot.sendMessage(_chat['id'], 'Binded TgId:{0} with Tk:{1}'.format(_chat['id'], tkName))
+        if tkName == '/bind':
+            bot.sendMessage(_tgId, 'Missing TkName. /bind <TkName>')
+        elif not checkTunnelExists(bot.tunnels, tgId=_tgId, tkName=tkName):
+            bot.tunnels.append(Tunnel.new(_tgId, tkName))
+            bot.sendMessage(_tgId, 'Binded TgId:{0} with Tk:{1}'.format(_tgId, tkName))
+        else:
+            bot.sendMessage(_tgId, 'That binding is already exists.')
         
