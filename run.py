@@ -2,7 +2,8 @@ from __future__ import unicode_literals
 import sys, json, Queue
 
 from tgbot import TgBot
-from TkBot import TkBot
+from tkbot import TkBot
+from utils.tunnel import Tunnel
 
 tkRoomId = 8099831
 
@@ -11,8 +12,22 @@ def loadConfig(path):
         config = json.loads(f.read())
     return config
 
-def writeConfig(config, path):
+def loadBind(config):
+    bindList = config['bindTgTk']
+    tunnelList = []
+    for each in bindList:
+        tunnelList.append(Tunnel.fromSave(each))
+    return tunnelList
+
+def writeBind(config, tunnels):
+    config['bindTgTk'] = []
+    for each in tunnels:
+        config['bindTgTk'].append(each.toSave())
+        
+
+def writeConfig(config, tunnels, path):
     try:
+        writeBind(config, tunnels)
         data = json.dumps(config, indent=4)
         with open(path, 'w'): pass # Clear file content
         with open(path, 'w') as f:
@@ -23,10 +38,9 @@ def writeConfig(config, path):
 if __name__ == "__main__":
     path = './config.json'
     config = loadConfig(path)
-    tgQueue = Queue.Queue()
-    tkQueue = Queue.Queue()
-    tgBot = TgBot(config['telegramBot'], tgQueue=tgQueue, tkQueue=tkQueue)
-    tkBot = TkBot(tkRoomId, tkQueue=tkQueue, tgQueue=tgQueue)
+    tunnels = loadBind(config)
+    tgBot = TgBot(config['telegramBot'], tunnels=tunnels)
+    tkBot = TkBot(tunnels=tunnels)
 
     while True:
         try:
@@ -37,7 +51,7 @@ if __name__ == "__main__":
             elif 'stop' in userInput:
                 tgBot.stop()
                 tkBot.stop()
-#                writeConfig(config)
+                writeConfig(config, tunnels, path)
                 sys.exit(0)
         except KeyboardInterrupt:
             tgBot.stop()
