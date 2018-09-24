@@ -5,10 +5,10 @@ import telepot
 from telepot.loop import MessageLoop
 
 from utils import *
-from command import Command
-from command.bind import Bind
-from command.listbind import ListBind
-from command.toggle import Toggle
+from tgbot.command import Command
+from tgbot.command.bind import Bind
+from tgbot.command.listbind import ListBind
+from tgbot.command.toggle import Toggle
 
 class TgBot(threading.Thread):
 

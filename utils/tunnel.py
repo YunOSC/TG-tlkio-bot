@@ -1,7 +1,11 @@
 from __future__ import unicode_literals
 
 from utils import *
-import Queue, time
+import time
+try:
+    import Queue as queue
+except ImportError:
+    import queue
 
 class Tunnel(object):
 
@@ -27,13 +31,13 @@ class Tunnel(object):
         self.tg = {
             'id': tg['id'],
             'toggle': tg['toggle'],
-            'queue': Queue.Queue()
+            'queue': queue.Queue()
         }
         self.tk = {
             'id': tk['id'],
             'name': tk['name'],
             'toggle': tk['toggle'],
-            'queue': Queue.Queue(),
+            'queue': queue.Queue(),
             'lastTS': tk['lastTS']
         }
 

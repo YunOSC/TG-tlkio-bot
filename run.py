@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 import click
-import sys, json, Queue
+import sys, json
+if sys.version[0] == '3':
+    raw_input = input
 
 from tgbot import TgBot
 from tkbot import TkBot
