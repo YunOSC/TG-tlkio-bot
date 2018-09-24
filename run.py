@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+import click
 import sys, json, Queue
 
 from tgbot import TgBot
@@ -35,12 +36,18 @@ def writeConfig(config, tunnels, path):
     except:
         pass
 
-if __name__ == "__main__":
+@click.command()
+@click.option('--start', default=False, type=bool)
+def run(start):
     path = './config.json'
     config = loadConfig(path)
     tunnels = loadBind(config)
     tgBot = TgBot(config['telegramBot'], tunnels=tunnels)
     tkBot = TkBot(tunnels=tunnels)
+
+    if start:
+        tgBot.start()
+        tkBot.start()
 
     while True:
         try:
@@ -57,5 +64,7 @@ if __name__ == "__main__":
             tgBot.stop()
             tkBot.stop()
             sys.exit(0)
-        
+
+if __name__ == "__main__":
+    run()
 

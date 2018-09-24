@@ -1,30 +1,5 @@
 {
-    "bindTgTk": [
-        {
-            "tg": {
-                "toggle": true, 
-                "id": -317830139
-            }, 
-            "tk": {
-                "lastTS": 1537790501.497599, 
-                "toggle": false, 
-                "id": "8099831", 
-                "name": "yunosc-test"
-            }
-        }, 
-        {
-            "tg": {
-                "toggle": false, 
-                "id": -305590568
-            }, 
-            "tk": {
-                "lastTS": 1537791614.412996, 
-                "toggle": false, 
-                "id": "8008997", 
-                "name": "yunosc"
-            }
-        }
-    ], 
+    "bindTgTk": [], 
     "tlkioBot": {
         "roomName": "yunosc-test", 
         "roomId": "This is your tlk.io square id"
