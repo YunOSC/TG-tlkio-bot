@@ -10,7 +10,7 @@ class Toggle(Command):
     def invoke(self, msg):
         pass
 
-    def process(self, bot, msg):
+    def process(self, bot, cmd, msg):
         _tgId = msg['chat']['id']
         for each in getMatchTunnels(bot.tunnels, tgId=_tgId):
             each.tg['toggle'] = not each.tg['toggle']

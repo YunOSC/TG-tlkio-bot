@@ -10,7 +10,7 @@ class Command(object):
     def invoke(self, msg):
         raise NotImplementedError
 
-    def process(self, **kwargs):
+    def process(self, bot, cmd, **kwargs):
         raise NotImplementedError
 
 

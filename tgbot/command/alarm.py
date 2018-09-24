@@ -7,5 +7,5 @@ class Alarm(Command):
     def invoke(self, msg):
         pass
 
-    def process(self):
+    def process(self, bot, cmd, msg):
         pass

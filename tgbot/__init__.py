@@ -49,9 +49,10 @@ class TgBot(threading.Thread):
             if 'text' in msg:
                 _text = msg['text']
                 if _text.startswith('/'):
+                    cmdArg = _text.split(' ')
                     for each in self.commands:
-                        if _text.split(' ')[0] == ('/' + each.cmd): #_text.startswith('/' + type(each).__name__.lower()):
-                            return each.process(self, msg)
+                        if cmdArg[0] == ('/' + each.cmd): #_text.startswith('/' + type(each).__name__.lower()):
+                            return each.process(self, cmd=cmdArg, msg=msg)
                     self.sendMessage(_chat['id'], 'Unknown command')
                 else:
                     for tunnel in getMatchTunnels(self.tunnels, tgId=_chat['id']):
