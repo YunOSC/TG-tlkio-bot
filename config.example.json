@@ -1,23 +1,8 @@
 {
-    "bindTgTk": [
-        {
-            "tg": {
-                "id": "",
-                "toggle": false
-            },
-            "tk": {
-                "id": "",
-                "toggle": false
-            }
-        }
-    ],
+    "bindTgTk": [],
     "telegramBot": {
         "botUserName": "This is bot USERNAME",
-        "token": "This is your bot token",
-        "rooms": {}
+        "token": "This is your bot token"
     },
-    "tlkioBot": {
-        "roomId": "This is your tlk.io square id",
-        "rooms": {}
-    }
+    "tlkioBot": {}
 }

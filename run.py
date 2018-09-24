@@ -8,8 +8,6 @@ from tgbot import TgBot
 from tkbot import TkBot
 from utils.tunnel import Tunnel
 
-tkRoomId = 8099831
-
 def loadConfig(path):
     with open(path) as f:
         config = json.loads(f.read())

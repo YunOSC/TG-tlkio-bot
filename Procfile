@@ -1,1 +1,1 @@
-web: python run.py --start True
+worker: python run.py --start True
