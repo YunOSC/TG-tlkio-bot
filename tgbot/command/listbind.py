@@ -14,5 +14,7 @@ class ListBind(Command):
         message = ''
         for each in bot.tunnels:
             message += 'TG: {0} <-> TK: {1}\n'.format(each.tg['id'], each.tk['id'])
+        if message == '':
+            message = 'No existing binding.'
         bot.sendMessage(_chat['id'], message)
 

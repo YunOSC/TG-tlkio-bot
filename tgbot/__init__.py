@@ -33,8 +33,8 @@ class TgBot(threading.Thread):
         
         self.commands = [
             #Alarm('alarm', time.time())
-            Bind('b'),
-            ListBind('lb'),
+            Bind('bind'),
+            ListBind('listbind'),
             Toggle('toggle')
         ]
         self.persons = self.loadPersonConfig()
@@ -51,7 +51,7 @@ class TgBot(threading.Thread):
                 for each in self.commands:
                     if msg['text'].startswith('/' + each.cmd): #msg['text'].startswith('/' + type(each).__name__.lower()):
                         return each.process(self, msg)
-                print('Unknown command')
+                self.sendMessage(_chat['id'], 'Unknown command')
             else:
                 _text = msg['text']
                 for tunnel in getMatchTunnels(self.tunnels, tgId=_chat['id']):

@@ -1,8 +1,8 @@
 {
-    "bindTgTk": [],
-    "tlkioBot": {},
+    "bindTgTk": [], 
+    "tlkioBot": {}, 
     "telegramBot": {
-        "botUserName": "AsukaMeow_bot",
+        "botUserName": "AsukaMeow_bot", 
         "token": "652483905:AAEPmruMxQAvI0weh2zL4R8-_VY6QwYYxJ0"
     }
 }
