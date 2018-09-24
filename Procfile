@@ -1,1 +1,1 @@
-web: python run.app --start True
+web: python run.py --start True
