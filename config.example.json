@@ -1,4 +1,5 @@
 {
+    "admin": [],
     "bindTgTk": [],
     "telegramBot": {
         "botUserName": "This is bot USERNAME",

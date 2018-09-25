@@ -1,10 +1,18 @@
 from __future__ import unicode_literals
 
+from utils.user import User
 import requests, re
 
 def fetchTkId(roomName):
     res = requests.get('https://tlk.io/' + roomName)
     return re.search('Talkio\.Variables\.chat_id = \'.*?\';', res.text).group(0)[28:-2]
+
+def checkUserExists(checkList, user):
+    assert type(user) == User
+    for each in checkList:
+        if each == user:
+            return True
+    return False
 
 def checkTunnelExists(tunnels, tgId, tkId=None, tkName=None):
     assert tkId != None or tkName != None

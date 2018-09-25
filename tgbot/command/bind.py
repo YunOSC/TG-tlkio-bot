@@ -26,3 +26,4 @@ class Bind(Command):
         else:
             message = 'Missing TkName. /bind <TkName>'
         self.bot.sendMessage(_tgId, message)
+

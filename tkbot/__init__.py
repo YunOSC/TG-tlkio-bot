@@ -1,15 +1,17 @@
 # coding=UTF-8
 from __future__ import unicode_literals
-import re, json, threading, requests, time
+import json, threading, requests, time
 from threading import Event
 
 class TkBot(threading.Thread):
 
-    def __init__(self, tunnels, loopDelay=0.1):
+    def __init__(self, admins, tunnels, loopDelay=0.1, debug=False):
         super(TkBot, self).__init__()
+        self.debug = debug
         self.stopped = Event()
         self.loopDelay = loopDelay
 
+        self.admins = admins
         self.tunnels = tunnels
         self.tkLink = requests.Session()
 
