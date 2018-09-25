@@ -1,8 +1,7 @@
 # coding=UTF-8
 import traceback, threading, json, time
 from threading import Event
-import telepot
-from telepot.loop import MessageLoop
+from telebot import TeleBot
 
 from utils import *
 from tgbot.command import Command
@@ -28,56 +27,58 @@ class TgBot(threading.Thread):
         self.tunnels = tunnels
         self.config = config
         self.botUserName = config['botUserName']
-        self.bot = telepot.Bot(config['token'])
+        self.bot = TeleBot(config['token'])
         
         self.commands = [
             #Alarm('alarm', time.time())
-            Bind('bind'),
-            ListBind('listbind'),
-            Toggle('toggle'),
-            UnBind('unbind')
+            Bind(bot=self, cmd=['b', 'bind']),
+            ListBind(bot=self, cmd=['lb', 'listbind']),
+            Toggle(bot=self, cmd=['t', 'toggle']),
+            UnBind(bot=self, cmd=['ub', 'unbind'])
         ]
         self.persons = self.loadPersonConfig()
 
     def sendMessage(self, _id, _msg):
-        self.bot.sendMessage(_id, _msg)
+        self.bot.send_message(_id, _msg)
+
+    def replyTo(self, msg, _msg):
+        self.bot.reply_to(msg, _msg)
+
+    def listbind_handler(self, message):
+        print(message)
 
     def handler(self, msg):
-        try:
-            _from = msg['from']
-            _chat = msg['chat']
-            if 'text' in msg:
-                _text = msg['text']
-                if _text.startswith('/'):
-                    cmdArg = _text.split(' ')
-                    for each in self.commands:
-                        if cmdArg[0] == ('/' + each.cmd): #_text.startswith('/' + type(each).__name__.lower()):
-                            return each.process(self, cmd=cmdArg, msg=msg)
-                    self.sendMessage(_chat['id'], 'Unknown command')
-                else:
-                    for tunnel in getMatchTunnels(self.tunnels, tgId=_chat['id']):
-                        if tunnel.tg['toggle'] and _text.startswith('#'):
-                            if _text.startswith('##'):
-                                message = '[Anonymous]: {0}'.format(_text[2:])
-                            else:
-                                message = '[{0}]: {1}'.format(_from['username'], _text[1:])
+        for each in msg:
+            try:
+                _from = each.from_user
+                _chat = each.chat
+                if each.text and each.text.startswith('#'):
+                    _text = each.text
+                    for tunnel in getMatchTunnels(self.tunnels, tgId=_chat.id):
+                        if tunnel.tg['toggle']:
+                            message = '[Anonymous]: {0}'.format(_text[2:]) if _text.startswith('##') else '[{0}]: {1}'.format(_from.username, _text[1:])
                             tunnel.tk['queue'].put(message)
-            
-        except:
-            print(traceback.print_exc())
-        finally:
-            return 
+            except:
+                print(traceback.print_exc())
+
+    def queueHandler(self):
+        while not self.stopped.wait(self.loopDelay):
+            for each in self.tunnels:
+                tg = each.tg
+                while not tg['queue'].empty() and tg['toggle']:
+                    self.sendMessage(tg['id'], tg['queue'].get())
 
     def start(self):
         super(TgBot, self).start()
 
     def run(self):
-        MessageLoop(self.bot, self.handler).run_as_thread()
-        while not self.stopped.wait(self.loopDelay):
-            for each in self.tunnels:
-                tg = each.tg
-                while not tg['queue'].empty() and tg['toggle']:
-                    self.bot.sendMessage(tg['id'], tg['queue'].get())
+        for cmd in self.commands:
+            cmd.register()
+        self.bot.set_update_listener(self.handler)
+        thread = threading.Thread(target=self.queueHandler)
+        thread.start()
+        self.bot.polling()
 
     def stop(self):
+        self.bot.stop_bot()
         self.stopped.set()

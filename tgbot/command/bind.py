@@ -6,20 +6,23 @@ from utils.tunnel import Tunnel
 
 class Bind(Command):
 
-    def __init__(self, cmd):
-        super(Bind, self).__init__(cmd)
+    def __init__(self, bot, cmd):
+        super(Bind, self).__init__(bot, cmd)
 
     def invoke(self, msg):
         pass
 
-    def process(self, bot, cmd, msg):
-        _tgId = msg['chat']['id']
+    def process(self, msg):
+        _tgId = msg.chat.id
+        cmd = msg.text.split(' ')
+        message = ''
         if len(cmd) > 1:
             tkName = cmd[1]
-            if not checkTunnelExists(bot.tunnels, tgId=_tgId, tkName=tkName):
-                bot.tunnels.append(Tunnel.new(_tgId, tkName))
-                bot.sendMessage(_tgId, 'Binded TgId:{0} with Tk:{1}'.format(_tgId, tkName))
+            if not checkTunnelExists(self.bot.tunnels, tgId=_tgId, tkName=tkName):
+                self.bot.tunnels.append(Tunnel.new(_tgId, tkName))
+                message = 'Binded TgId:{0} with Tk:{1}'.format(_tgId, tkName)
             else:
-                bot.sendMessage(_tgId, 'That binding is already exists.')
+                message = 'That binding is already exists.'
         else:
-            bot.sendMessage(_tgId, 'Missing TkName. /bind <TkName>')
+            message = 'Missing TkName. /bind <TkName>'
+        self.bot.sendMessage(_tgId, message)
