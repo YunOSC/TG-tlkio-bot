@@ -48,9 +48,9 @@ def writeConfig(config, admins, tunnels, path):
 
 @click.command()
 @click.option('--start', default=False, type=bool)
+@click.option('--path', default='./config.json', type=str)
 @click.option('--debug', default=False, type=bool)
-def run(start, debug):
-    path = './config.json'
+def run(start, path, debug):
     config = loadConfig(path)
     admins = loadAdmin(config)
     tunnels = loadBind(config)

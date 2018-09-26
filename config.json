@@ -1,6 +1,19 @@
 {
     "admin": [],
-    "bindTgTk": [],
+    "bindTgTk": [
+        {
+            "tg": {
+                "id": 667529212,
+                "toggle": true
+            },
+            "tk": {
+                "id": "8008997",
+                "name": "yunosc",
+                "toggle": true,
+                "lastTS": 1537901239.0776355
+            }
+        }
+    ],
     "tlkioBot": {},
     "telegramBot": {
         "botUserName": "AsukaMeow_bot",
