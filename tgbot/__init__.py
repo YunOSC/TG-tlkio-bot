@@ -60,7 +60,8 @@ class TgBot(threading.Thread):
                     _text = each.text
                     for tunnel in getMatchTunnels(self.tunnels, tgId=_chat.id):
                         if tunnel.tg['toggle']:
-                            message = '[Anonymous]: {0}'.format(_text[2:]) if _text.startswith('##') else '[{0}]: {1}'.format(_from.username, _text[1:])
+                            name = _from.username or _from.first_name or _from.last_name
+                            message = '[Anonymous]: {0}'.format(_text[2:]) if _text.startswith('##') else '[{0}]: {1}'.format(name, _text[1:])
                             tunnel.tk['queue'].put(message)
                 if self.debug:
                     print(each)
