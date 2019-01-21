@@ -15,7 +15,7 @@ class UnBind(Command):
         cmd = msg.text.split(' ')
         if len(cmd) > 1:
             tkName = cmd[1]
-            if tkName == 'global':
+            if tkName == 'all' or tkName == 'global':
                 self.bot.tunnels.clear()
                 self.bot.sendMessage(_tgId, 'All tunnels are cleared.')
             elif checkTunnelExists(self.bot.tunnels, tgId=_tgId, tkName=tkName):

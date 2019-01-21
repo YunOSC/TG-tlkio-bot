@@ -5,11 +5,12 @@ from telebot import TeleBot
 
 from utils import *
 from tgbot.command import Command
-from tgbot.command.addadmin import AddAdmin
+# from tgbot.command.add_admin import AddAdmin
 from tgbot.command.bind import Bind
-from tgbot.command.listbind import ListBind
+from tgbot.command.list_bind import ListBind
 from tgbot.command.toggle import Toggle
-from tgbot.command.unbind import UnBind
+from tgbot.command.list_toggle import ListToggle
+from tgbot.command.un_bind import UnBind
 
 class TgBot(threading.Thread):
 
@@ -33,12 +34,13 @@ class TgBot(threading.Thread):
         self.bot = TeleBot(config['token'])
         
         self.commands = [
-            AddAdmin(bot=self, cmd=['add-admin']),
-            #Alarm('alarm', time.time())
+            # AddAdmin(bot=self, cmd=['add-admin']),
+            # Alarm('alarm', time.time())
             Bind(bot=self, cmd=['b', 'bind']),
-            ListBind(bot=self, cmd=['lb', 'listbind']),
+            ListBind(bot=self, cmd=['lb', 'listbind', 'list-bind']),
             Toggle(bot=self, cmd=['t', 'toggle']),
-            UnBind(bot=self, cmd=['ub', 'unbind'])
+            ListToggle(bot=self, cmd=['lt', 'listtoggle', 'list-toggle']),
+            UnBind(bot=self, cmd=['ub', 'unbind', 'un-bind'])
         ]
         self.persons = self.loadPersonConfig()
 

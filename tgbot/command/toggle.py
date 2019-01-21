@@ -42,12 +42,12 @@ class Toggle(Command):
                     each.tk['toggle'] = not each.tk['toggle']
 
                 if each.tg['toggle'] and each.tk['toggle']:
-                    message += 'This TG room <===> Tk {0}'.format(each.tk['name'])
+                    message += 'This TG room <===> Tk {0}\n'.format(each.tk['name'])
                 elif each.tg['toggle'] and not each.tk['toggle']:
-                    message += 'This TG room ----> Tk {0}'.format(each.tk['name'])
+                    message += 'This TG room ----> Tk {0}\n'.format(each.tk['name'])
                 elif not each.tg['toggle'] and each.tk['toggle']:
-                    message += 'This TG room <---- Tk {0}'.format(each.tk['name'])
+                    message += 'This TG room <---- Tk {0}\n'.format(each.tk['name'])
                 else:
-                    message += 'This TG room --x-- Tk {0}'.format(each.tk['name'])
+                    message += 'This TG room --x-- Tk {0}\n'.format(each.tk['name'])
         self.bot.sendMessage(_tgId, message)
 
